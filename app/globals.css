@@ -1,26 +1,104 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  --color-brand-blue: #0070d2;
+  --color-brand-blue-50: #eaf3fc;
+  --color-brand-blue-100: #cfe3f7;
+  --color-brand-blue-200: #9ec5ec;
+  --color-brand-blue-300: #6fa9e0;
+  --color-brand-blue-500: #0070d2;
+  --color-brand-blue-600: #005ab0;
+  --color-brand-blue-700: #00468a;
+  --color-brand-blue-900: #002752;
+
+  --color-brand-lime: #7bc043;
+  --color-brand-lime-50: #f1faea;
+  --color-brand-lime-100: #ddf3c8;
+  --color-brand-lime-300: #b3df88;
+  --color-brand-lime-500: #7bc043;
+  --color-brand-lime-600: #65a635;
+  --color-brand-lime-700: #4f8429;
+
+  /* Ink scale = TEXT colors. Light end (900) reads on dark base. */
+  --color-ink-900: #eef2f9;
+  --color-ink-700: #c5cdd9;
+  --color-ink-500: #8995a8;
+  --color-ink-300: #46506a;
+
+  /* Surfaces */
+  --color-paper: #0a101e;
+  --color-surface: #131c30;
+  --color-surface-2: #1a2440;
+
+  --color-background: #0b1322;
+  --color-foreground: #eef2f9;
+
+  --font-sans: var(--font-sans-stack);
+  --font-display: var(--font-display-stack);
+
+  --radius-2xl: 1.25rem;
+  --radius-3xl: 1.75rem;
+  --radius-4xl: 2.25rem;
+  --radius-bento: 2rem;
+
+  --shadow-soft: 0 12px 40px -16px rgb(0 0 0 / 0.55);
+  --shadow-glow: 0 0 0 1px rgb(0 112 210 / 0.22), 0 24px 60px -24px rgb(0 112 210 / 0.55);
+
+  --ease-premium: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  body {
+    background: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans-stack), ui-sans-serif, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection {
+    background: color-mix(in oklab, var(--color-brand-blue) 38%, transparent);
+    color: white;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@utility brand-gradient {
+  background-image: linear-gradient(120deg, var(--color-brand-blue) 0%, #1aa0c9 55%, var(--color-brand-lime) 100%);
+}
+
+@utility brand-gradient-text {
+  background-image: linear-gradient(120deg, var(--color-brand-blue) 0%, #1aa0c9 55%, var(--color-brand-lime) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@utility glass-nav {
+  background: color-mix(in oklab, white 6%, transparent);
+  backdrop-filter: saturate(160%) blur(14px);
+  -webkit-backdrop-filter: saturate(160%) blur(14px);
+  border: 1px solid color-mix(in oklab, white 10%, transparent);
+}
+
+@utility soft-card {
+  background: var(--color-surface);
+  border: 1px solid color-mix(in oklab, white 8%, transparent);
+  box-shadow: var(--shadow-soft);
+}
+
+@utility dark-glass {
+  background: color-mix(in oklab, white 5%, transparent);
+  backdrop-filter: saturate(150%) blur(10px);
+  -webkit-backdrop-filter: saturate(150%) blur(10px);
+  border: 1px solid color-mix(in oklab, white 10%, transparent);
+}
+
+@utility grid-noise {
+  background-image:
+    radial-gradient(1200px 600px at 10% -10%, color-mix(in oklab, var(--color-brand-blue) 36%, transparent), transparent 60%),
+    radial-gradient(900px 500px at 110% 10%, color-mix(in oklab, var(--color-brand-lime) 22%, transparent), transparent 55%),
+    linear-gradient(180deg, var(--color-background), var(--color-paper));
 }
