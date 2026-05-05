@@ -16,20 +16,13 @@ const ICONS = {
 
 export function BentoServices() {
   return (
-    <Stagger className="grid grid-cols-1 gap-4 md:grid-cols-6 md:gap-5">
-      {SERVICES.map((s, i) => {
+    <Stagger className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-5">
+      {SERVICES.map((s) => {
         const Icon = ICONS[s.icon as keyof typeof ICONS];
-        const tall = i === 0;
-        const wide = i === 3;
-        const span = tall
-          ? "md:col-span-3 md:row-span-2"
-          : wide
-            ? "md:col-span-3"
-            : "md:col-span-3";
         return (
           <StaggerItem
             key={s.slug}
-            className={`group relative overflow-hidden rounded-bento soft-card ${span}`}
+            className="group relative flex flex-col overflow-hidden rounded-bento soft-card"
           >
             <Link href={`/services/${s.slug}`} className="block h-full">
               <div className="relative aspect-[16/10] overflow-hidden md:aspect-auto md:h-56">

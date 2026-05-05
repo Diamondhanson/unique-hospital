@@ -1,7 +1,8 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
-import { MapPin, Phone, Mail, HeartPulse } from "lucide-react";
+import { MapPin, Phone, Mail } from "lucide-react";
 import { HOSPITAL, NAV_LINKS } from "@/lib/hospital";
 import { useLang } from "@/components/i18n/LangProvider";
 
@@ -12,13 +13,18 @@ export function Footer() {
     <footer className="mt-24 border-t border-white/10 bg-paper">
       <div className="mx-auto grid max-w-7xl gap-12 px-6 py-16 md:grid-cols-4">
         <div className="md:col-span-2">
-          <Link href="/" className="flex items-center gap-2">
-            <span className="brand-gradient grid h-9 w-9 place-items-center rounded-2xl text-white">
-              <HeartPulse className="h-5 w-5" />
-            </span>
-            <span className="font-display text-xl font-semibold tracking-tight text-ink-900">
-              {HOSPITAL.name}
-            </span>
+          <Link
+            href="/"
+            aria-label={HOSPITAL.name}
+            className="inline-flex items-center"
+          >
+            <Image
+              src="/logo.png"
+              alt={HOSPITAL.name}
+              width={707}
+              height={353}
+              className="h-[3.6rem] w-auto"
+            />
           </Link>
           <p className="mt-4 max-w-md text-ink-500">
             Bridging international healthcare standards with local accessibility

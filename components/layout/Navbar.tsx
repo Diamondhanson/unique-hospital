@@ -1,8 +1,9 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { Menu, X, Phone, HeartPulse, ChevronDown } from "lucide-react";
+import { Menu, X, Phone, ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { HOSPITAL, NAV_LINKS } from "@/lib/hospital";
 import { useLang, type Lang } from "@/components/i18n/LangProvider";
@@ -30,18 +31,19 @@ export function Navbar() {
           scrolled ? "glass-nav shadow-soft" : "glass-nav"
         }`}
       >
-        <Link href="/" className="flex items-center gap-2">
-          <span className="brand-gradient grid h-9 w-9 place-items-center rounded-2xl text-white shadow-glow">
-            <HeartPulse className="h-5 w-5" />
-          </span>
-          <span className="flex flex-col leading-none">
-            <span className="font-display text-lg font-semibold tracking-tight text-ink-900">
-              {HOSPITAL.name}
-            </span>
-            <span className="text-[11px] font-medium uppercase tracking-[0.18em] text-ink-500">
-              {HOSPITAL.slogan}
-            </span>
-          </span>
+        <Link
+          href="/"
+          aria-label={HOSPITAL.name}
+          className="flex items-center"
+        >
+          <Image
+            src="/logo.png"
+            alt={HOSPITAL.name}
+            width={707}
+            height={353}
+            preload
+            className="h-12 w-auto sm:h-[3.3rem]"
+          />
         </Link>
 
         <ul className="hidden items-center gap-1 md:flex">
