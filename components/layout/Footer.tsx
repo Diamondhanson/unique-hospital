@@ -2,12 +2,16 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { MapPin, Phone, Mail } from "lucide-react";
 import { HOSPITAL, NAV_LINKS } from "@/lib/hospital";
 import { useLang } from "@/components/i18n/LangProvider";
 
 export function Footer() {
   const { t } = useLang();
+  const pathname = usePathname();
+
+  if (pathname?.startsWith("/studio")) return null;
 
   return (
     <footer className="mt-24 border-t border-white/10 bg-paper">
