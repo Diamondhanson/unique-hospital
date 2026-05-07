@@ -1,7 +1,7 @@
 "use client";
 
-import Link from "next/link";
 import { motion } from "framer-motion";
+import { useTranslations } from "next-intl";
 import {
   ArrowRight,
   Baby,
@@ -9,7 +9,8 @@ import {
   FlaskConical,
   HeartHandshake,
 } from "lucide-react";
-import { SERVICES } from "@/lib/hospital";
+import { SERVICE_DEFS } from "@/lib/hospital";
+import { Link } from "@/i18n/navigation";
 
 const ICONS = {
   Baby,
@@ -20,7 +21,15 @@ const ICONS = {
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
-export function ServicesDropdown({ onItemClick }: { onItemClick?: () => void }) {
+export function ServicesDropdown({
+  onItemClick,
+}: {
+  onItemClick?: () => void;
+}) {
+  const t = useTranslations("services");
+  const tCommon = useTranslations("common");
+  const tCta = useTranslations("cta");
+
   return (
     <motion.div
       initial={{ opacity: 0, y: -8, scale: 0.98 }}
@@ -34,10 +43,10 @@ export function ServicesDropdown({ onItemClick }: { onItemClick?: () => void }) 
         <div className="flex items-center justify-between px-3 pb-3 pt-2">
           <div>
             <div className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-blue-200">
-              Our domains of care
+              {tCommon("ourDomainsOfCare")}
             </div>
             <div className="mt-0.5 text-sm text-ink-500">
-              Four service families, one standard.
+              {tCommon("fourServiceFamilies")}
             </div>
           </div>
           <Link
@@ -45,13 +54,18 @@ export function ServicesDropdown({ onItemClick }: { onItemClick?: () => void }) 
             onClick={onItemClick}
             className="hidden items-center gap-1 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-semibold text-ink-700 transition-colors hover:text-white sm:inline-flex"
           >
-            View all <ArrowRight className="h-3.5 w-3.5" />
+            {tCta("viewAll")} <ArrowRight className="h-3.5 w-3.5" />
           </Link>
         </div>
 
         <div className="grid gap-1 sm:grid-cols-2">
-          {SERVICES.map((s) => {
+          {SERVICE_DEFS.map((s) => {
             const Icon = ICONS[s.icon as keyof typeof ICONS];
+            const bullets = [
+              t(`${s.slug}.bullet1`),
+              t(`${s.slug}.bullet2`),
+              t(`${s.slug}.bullet3`),
+            ];
             return (
               <Link
                 key={s.slug}
@@ -67,11 +81,11 @@ export function ServicesDropdown({ onItemClick }: { onItemClick?: () => void }) 
                 </span>
                 <span className="min-w-0 flex-1">
                   <span className="flex items-center gap-1 font-display text-sm font-semibold tracking-tight text-ink-900 group-hover:text-white">
-                    {s.title}
+                    {t(`${s.slug}.title`)}
                     <ArrowRight className="h-3.5 w-3.5 -translate-x-1 opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100" />
                   </span>
                   <span className="mt-1 block text-xs leading-relaxed text-ink-500">
-                    {s.bullets.join(" · ")}
+                    {bullets.join(" · ")}
                   </span>
                 </span>
               </Link>

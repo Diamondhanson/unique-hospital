@@ -1,20 +1,20 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { useLocale, useTranslations } from "next-intl";
 import { Menu, X, Phone, ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { HOSPITAL, NAV_LINKS } from "@/lib/hospital";
-import { useLang, type Lang } from "@/components/i18n/LangProvider";
+import { Link, usePathname, useRouter } from "@/i18n/navigation";
 import { ServicesDropdown } from "@/components/layout/ServicesDropdown";
+import type { Locale } from "@/i18n/routing";
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
-  const { lang, setLang, t } = useLang();
-  const pathname = usePathname();
+  const tNav = useTranslations("nav");
+  const tCta = useTranslations("cta");
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -22,8 +22,6 @@ export function Navbar() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
-
-  if (pathname?.startsWith("/studio")) return null;
 
   return (
     <header className="sticky top-0 z-50 px-3 pt-3 sm:px-6 sm:pt-4">
@@ -35,11 +33,7 @@ export function Navbar() {
           scrolled ? "glass-nav shadow-soft" : "glass-nav"
         }`}
       >
-        <Link
-          href="/"
-          aria-label={HOSPITAL.name}
-          className="flex items-center"
-        >
+        <Link href="/" aria-label={HOSPITAL.name} className="flex items-center">
           <Image
             src="/logo.png"
             alt={HOSPITAL.name}
@@ -53,14 +47,14 @@ export function Navbar() {
         <ul className="hidden items-center gap-1 md:flex">
           {NAV_LINKS.map((link) =>
             link.href === "/services" ? (
-              <ServicesNavItem key={link.href} label={t(link.labelKey)} />
+              <ServicesNavItem key={link.href} label={tNav(link.key)} />
             ) : (
               <li key={link.href}>
                 <Link
                   href={link.href}
                   className="rounded-full px-4 py-2 text-sm font-medium text-ink-700 transition-colors hover:bg-white/8 hover:text-white"
                 >
-                  {t(link.labelKey)}
+                  {tNav(link.key)}
                 </Link>
               </li>
             ),
@@ -68,7 +62,7 @@ export function Navbar() {
         </ul>
 
         <div className="hidden items-center gap-2 md:flex">
-          <LangToggle lang={lang} setLang={setLang} t={t} />
+          <LangToggle />
           <a
             href={`tel:${HOSPITAL.phones[0].replace(/\s/g, "")}`}
             className="flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-2 text-sm text-ink-700 transition-colors hover:border-brand-blue-300 hover:text-white"
@@ -80,14 +74,14 @@ export function Navbar() {
             href="/appointment"
             className="brand-gradient rounded-full px-4 py-2 text-sm font-semibold text-white shadow-glow transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5"
           >
-            {t("cta.book")}
+            {tCta("book")}
           </Link>
         </div>
 
         <div className="flex items-center gap-2 md:hidden">
-          <LangToggle lang={lang} setLang={setLang} t={t} compact />
+          <LangToggle compact />
           <button
-            aria-label="Toggle navigation"
+            aria-label={tNav("toggleNavigation")}
             onClick={() => setOpen((s) => !s)}
             className="grid h-10 w-10 place-items-center rounded-2xl border border-white/10 bg-white/5 text-ink-700"
           >
@@ -113,7 +107,7 @@ export function Navbar() {
                     onClick={() => setOpen(false)}
                     className="block rounded-2xl px-4 py-3 text-base font-medium text-ink-700 hover:bg-white/8 hover:text-white"
                   >
-                    {t(link.labelKey)}
+                    {tNav(link.key)}
                   </Link>
                 </li>
               ))}
@@ -123,7 +117,7 @@ export function Navbar() {
                   onClick={() => setOpen(false)}
                   className="brand-gradient block rounded-2xl px-4 py-3 text-center text-base font-semibold text-white"
                 >
-                  {t("cta.book")}
+                  {tCta("book")}
                 </Link>
               </li>
             </ul>
@@ -183,21 +177,21 @@ function ServicesNavItem({ label }: { label: string }) {
   );
 }
 
-function LangToggle({
-  lang,
-  setLang,
-  t,
-  compact = false,
-}: {
-  lang: Lang;
-  setLang: (l: Lang) => void;
-  t: (k: string) => string;
-  compact?: boolean;
-}) {
+function LangToggle({ compact = false }: { compact?: boolean }) {
+  const t = useTranslations("lang");
+  const locale = useLocale() as Locale;
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const switchTo = (next: Locale) => {
+    if (next === locale) return;
+    router.replace(pathname, { locale: next });
+  };
+
   return (
     <div
       role="group"
-      aria-label={t("lang.toggle")}
+      aria-label={t("toggle")}
       className={`relative flex items-center rounded-full border border-white/10 bg-white/5 p-0.5 ${
         compact ? "" : ""
       }`}
@@ -206,15 +200,15 @@ function LangToggle({
         layout
         transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
         className="brand-gradient absolute inset-y-0.5 w-[calc(50%-2px)] rounded-full"
-        style={{ left: lang === "en" ? 2 : "calc(50% + 0px)" }}
+        style={{ left: locale === "en" ? 2 : "calc(50% + 0px)" }}
       />
       {(["en", "fr"] as const).map((code) => {
-        const active = lang === code;
+        const active = locale === code;
         return (
           <button
             key={code}
             type="button"
-            onClick={() => setLang(code)}
+            onClick={() => switchTo(code)}
             aria-pressed={active}
             className={`relative z-10 px-2.5 py-1 text-xs font-semibold uppercase tracking-wider transition-colors duration-300 ${
               active ? "text-white" : "text-ink-500 hover:text-ink-700"

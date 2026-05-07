@@ -1,17 +1,14 @@
-"use client";
-
 import Image from "next/image";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { MapPin, Phone, Mail } from "lucide-react";
 import { HOSPITAL, NAV_LINKS } from "@/lib/hospital";
-import { useLang } from "@/components/i18n/LangProvider";
+import { Link } from "@/i18n/navigation";
 
 export function Footer() {
-  const { t } = useLang();
-  const pathname = usePathname();
-
-  if (pathname?.startsWith("/studio")) return null;
+  const tNav = useTranslations("nav");
+  const tCta = useTranslations("cta");
+  const tFooter = useTranslations("footer");
+  const tHospital = useTranslations("hospital");
 
   return (
     <footer className="mt-24 border-t border-white/10 bg-paper">
@@ -31,8 +28,7 @@ export function Footer() {
             />
           </Link>
           <p className="mt-4 max-w-md text-ink-500">
-            Bridging international healthcare standards with local accessibility
-            in Douala, Cameroon. {HOSPITAL.slogan}.
+            {tFooter("bridgeText", { slogan: tHospital("slogan") })}
           </p>
           <div className="mt-6 flex flex-wrap gap-2">
             {HOSPITAL.phones.map((phone) => (
@@ -49,7 +45,7 @@ export function Footer() {
 
         <div>
           <h4 className="font-display text-sm font-semibold uppercase tracking-[0.18em] text-ink-500">
-            {t("footer.explore")}
+            {tFooter("explore")}
           </h4>
           <ul className="mt-4 space-y-2">
             {NAV_LINKS.map((l) => (
@@ -58,7 +54,7 @@ export function Footer() {
                   href={l.href}
                   className="text-ink-700 hover:text-brand-blue-200"
                 >
-                  {t(l.labelKey)}
+                  {tNav(l.key)}
                 </Link>
               </li>
             ))}
@@ -67,7 +63,7 @@ export function Footer() {
                 href="/appointment"
                 className="text-ink-700 hover:text-brand-blue-200"
               >
-                {t("cta.book")}
+                {tCta("book")}
               </Link>
             </li>
           </ul>
@@ -75,20 +71,20 @@ export function Footer() {
 
         <div>
           <h4 className="font-display text-sm font-semibold uppercase tracking-[0.18em] text-ink-500">
-            {t("footer.find_us")}
+            {tFooter("findUs")}
           </h4>
           <ul className="mt-4 space-y-3 text-ink-700">
             <li className="flex gap-2">
               <MapPin className="mt-0.5 h-5 w-5 shrink-0 text-brand-blue-300" />
               <span>
-                {HOSPITAL.location.area}, {HOSPITAL.location.country}
+                {tHospital("locationArea")}, {tHospital("locationCountry")}
                 <br />
-                {HOSPITAL.location.landmark}
+                {tHospital("locationLandmark")}
                 <br />
-                {HOSPITAL.location.neighborhood}
+                {tHospital("locationNeighborhood")}
                 <br />
                 <span className="text-ink-500">
-                  {HOSPITAL.location.district}
+                  {tHospital("locationDistrict")}
                 </span>
               </span>
             </li>
@@ -107,10 +103,13 @@ export function Footer() {
       <div className="border-t border-white/10">
         <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-2 px-6 py-6 text-sm text-ink-500 sm:flex-row sm:items-center">
           <p>
-            © {new Date().getFullYear()} {HOSPITAL.name}. Founded by{" "}
-            {HOSPITAL.founder}.
+            {tFooter("copyright", {
+              year: new Date().getFullYear(),
+              name: HOSPITAL.name,
+              founder: HOSPITAL.founder,
+            })}
           </p>
-          <p>Service of the Heart · Bonaberi-Douala</p>
+          <p>{tFooter("sloganShort")}</p>
         </div>
       </div>
     </footer>

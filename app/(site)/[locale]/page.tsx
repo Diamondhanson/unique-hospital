@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Link from "next/link";
 import {
   ArrowRight,
   Phone,
@@ -9,12 +8,22 @@ import {
   Stethoscope,
   HeartPulse,
 } from "lucide-react";
-import { HOSPITAL, STATS, POSTS, PILLARS } from "@/lib/hospital";
+import { useTranslations } from "next-intl";
+import { setRequestLocale } from "next-intl/server";
+import { HOSPITAL, STATS, PILLARS } from "@/lib/hospital";
+import { Link } from "@/i18n/navigation";
 import { FadeUp, Stagger, StaggerItem } from "@/components/motion/Reveal";
 import { BentoServices } from "@/components/sections/BentoServices";
-import { BlogCard } from "@/components/blog/BlogCard";
+import { HomeBlogSection } from "@/components/sections/HomeBlogSection";
+import type { Locale } from "@/i18n/routing";
 
-export default function HomePage() {
+export default async function HomePage({
+  params,
+}: {
+  params: Promise<{ locale: Locale }>;
+}) {
+  const { locale } = await params;
+  setRequestLocale(locale);
   return (
     <>
       <Hero />
@@ -22,13 +31,18 @@ export default function HomePage() {
       <PhilosophySection />
       <PillarsSection />
       <FamilySection />
-      <BlogSection />
+      <HomeBlogSection locale={locale} />
       <CtaSection />
     </>
   );
 }
 
 function Hero() {
+  const t = useTranslations("home");
+  const tHospital = useTranslations("hospital");
+  const tStats = useTranslations("stats");
+  const tCommon = useTranslations("common");
+
   return (
     <section className="relative overflow-hidden grid-noise">
       <div className="mx-auto grid max-w-7xl gap-10 px-6 pb-16 pt-12 md:grid-cols-12 md:gap-12 md:pb-24 md:pt-16">
@@ -36,22 +50,19 @@ function Hero() {
           <FadeUp>
             <span className="dark-glass inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold text-brand-blue-200">
               <Sparkles className="h-3.5 w-3.5" />
-              {HOSPITAL.slogan} · Bonaberi-Douala
+              {tHospital("slogan")} · {t("heroBadgeLocation")}
             </span>
           </FadeUp>
           <FadeUp delay={0.05}>
             <h1 className="mt-5 font-display text-4xl font-semibold leading-[1.05] tracking-tight text-ink-900 sm:text-5xl md:text-6xl">
-              Redefining{" "}
-              <span className="brand-gradient-text">Healthcare Excellence</span>{" "}
-              in Cameroon.
+              {t("heroTitlePre")}{" "}
+              <span className="brand-gradient-text">{t("heroTitleBrand")}</span>{" "}
+              {t("heroTitlePost")}
             </h1>
           </FadeUp>
           <FadeUp delay={0.1}>
             <p className="mt-5 max-w-xl text-lg leading-8 text-ink-500">
-              {HOSPITAL.tagline}. We blend modern American healthcare insights
-              with a deep love for the Cameroonian community — a new standard
-              for medical delivery, where quality, innovation, and patient
-              dignity come first.
+              {t("heroSubtitle", { tagline: tHospital("tagline") })}
             </p>
           </FadeUp>
           <FadeUp delay={0.15}>
@@ -60,7 +71,7 @@ function Hero() {
                 href="/appointment"
                 className="brand-gradient inline-flex items-center gap-2 rounded-full px-6 py-3 font-semibold text-white shadow-glow transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5"
               >
-                Book an appointment
+                {t("bookCta")}
                 <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
@@ -68,13 +79,13 @@ function Hero() {
           <Stagger className="mt-12 grid grid-cols-2 gap-3 sm:grid-cols-4">
             {STATS.map((s) => (
               <StaggerItem
-                key={s.label}
+                key={s.key}
                 className="rounded-3xl soft-card px-4 py-4"
               >
                 <div className="font-display text-2xl font-semibold tracking-tight text-brand-blue-200">
                   {s.value}
                 </div>
-                <div className="mt-1 text-xs text-ink-500">{s.label}</div>
+                <div className="mt-1 text-xs text-ink-500">{tStats(s.key)}</div>
               </StaggerItem>
             ))}
           </Stagger>
@@ -98,10 +109,10 @@ function Hero() {
                   </span>
                   <div>
                     <div className="text-sm font-semibold text-ink-900">
-                      24/7 emergency care
+                      {tCommon("twentyFourSeven")}
                     </div>
                     <div className="text-xs text-ink-500">
-                      {HOSPITAL.location.area}
+                      {tHospital("locationArea")}
                     </div>
                   </div>
                 </div>
@@ -113,17 +124,23 @@ function Hero() {
               <Clock4 className="h-5 w-5 text-brand-blue-300" />
               <div>
                 <div className="text-sm font-semibold text-ink-900">
-                  Avg wait
+                  {tCommon("averageWait")}
                 </div>
-                <div className="text-xs text-ink-500">under 12 minutes</div>
+                <div className="text-xs text-ink-500">
+                  {tCommon("averageWaitValue")}
+                </div>
               </div>
             </div>
 
             <div className="absolute -right-4 bottom-24 hidden rounded-2xl bg-paper border border-white/10 px-4 py-3 text-white sm:flex sm:items-center sm:gap-3">
               <Stethoscope className="h-5 w-5 text-brand-lime-500" />
               <div>
-                <div className="text-sm font-semibold">US-standard care</div>
-                <div className="text-xs text-white/70">guided protocols</div>
+                <div className="text-sm font-semibold">
+                  {tCommon("usStandardCare")}
+                </div>
+                <div className="text-xs text-white/70">
+                  {tCommon("guidedProtocols")}
+                </div>
               </div>
             </div>
           </div>
@@ -134,16 +151,20 @@ function Hero() {
 }
 
 function ServicesSection() {
+  const t = useTranslations("home");
+  const tCta = useTranslations("cta");
   return (
     <section id="services" className="mx-auto max-w-7xl px-6 py-20 md:py-28">
       <div className="mb-10 flex flex-col items-start justify-between gap-6 md:mb-14 md:flex-row md:items-end">
         <FadeUp className="max-w-2xl">
           <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-blue-200">
-            What we do
+            {t("servicesEyebrow")}
           </span>
           <h2 className="mt-3 font-display text-3xl font-semibold leading-tight tracking-tight text-ink-900 md:text-5xl">
-            Care that meets you where you live —{" "}
-            <span className="brand-gradient-text">in Bonaberi.</span>
+            {t("servicesTitlePre")}{" "}
+            <span className="brand-gradient-text">
+              {t("servicesTitleBrand")}
+            </span>
           </h2>
         </FadeUp>
         <FadeUp delay={0.05}>
@@ -151,7 +172,7 @@ function ServicesSection() {
             href="/services"
             className="dark-glass inline-flex items-center gap-1 rounded-full px-4 py-2 text-sm font-semibold text-ink-700 transition-colors hover:text-white"
           >
-            Explore all services <ArrowRight className="h-4 w-4" />
+            {tCta("exploreAllServices")} <ArrowRight className="h-4 w-4" />
           </Link>
         </FadeUp>
       </div>
@@ -161,47 +182,34 @@ function ServicesSection() {
 }
 
 function PhilosophySection() {
+  const t = useTranslations("home");
   return (
     <section className="relative overflow-hidden bg-paper text-white">
       <div className="mx-auto grid max-w-7xl gap-10 px-6 py-24 md:grid-cols-12">
         <FadeUp className="md:col-span-5">
           <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-lime-500">
-            Mission & philosophy
+            {t("philosophyEyebrow")}
           </span>
           <h2 className="mt-3 font-display text-3xl font-semibold leading-tight tracking-tight md:text-4xl">
-            Healthcare as a service of the heart.
+            {t("philosophyTitle")}
           </h2>
         </FadeUp>
         <FadeUp delay={0.08} className="md:col-span-7">
           <p className="text-lg leading-8 text-white/80">
-            We blend clinical excellence with profound compassion, ensuring
-            that every patient&apos;s needs are the primary architect of their
-            care. True healing happens when medicine meets humanity — our team
-            operates as a single, synchronized force combining expertise,
-            safety, and dedication to guide you on the swiftest path to
-            recovery.
+            {t("philosophyBody")}
           </p>
           <Stagger className="mt-8 grid gap-4 sm:grid-cols-3">
-            {[
-              {
-                k: "Compassion",
-                v: "Patient needs are the primary architect of their care.",
-              },
-              {
-                k: "Synchronized",
-                v: "One team, one force — expertise, safety, dedication.",
-              },
-              {
-                k: "Swift recovery",
-                v: "Medicine that meets humanity, guiding you home faster.",
-              },
-            ].map((p) => (
+            {[1, 2, 3].map((n) => (
               <StaggerItem
-                key={p.k}
+                key={n}
                 className="rounded-3xl border border-white/10 bg-white/[0.04] p-5"
               >
-                <div className="font-display text-lg font-semibold">{p.k}</div>
-                <div className="mt-1 text-sm text-white/70">{p.v}</div>
+                <div className="font-display text-lg font-semibold">
+                  {t(`philosophyPillar${n}Title` as const)}
+                </div>
+                <div className="mt-1 text-sm text-white/70">
+                  {t(`philosophyPillar${n}Body` as const)}
+                </div>
               </StaggerItem>
             ))}
           </Stagger>
@@ -214,32 +222,35 @@ function PhilosophySection() {
 }
 
 function PillarsSection() {
+  const t = useTranslations("home");
+  const tPillars = useTranslations("pillars");
   return (
     <section className="mx-auto max-w-7xl px-6 py-20 md:py-28">
       <div className="mb-12 max-w-2xl">
         <FadeUp>
           <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-blue-200">
-            Why entrust your health to us
+            {t("pillarsEyebrow")}
           </span>
           <h2 className="mt-3 font-display text-3xl font-semibold leading-tight tracking-tight text-ink-900 md:text-5xl">
-            Four reasons our patients keep{" "}
-            <span className="brand-gradient-text">coming back.</span>
+            {t("pillarsTitlePre")}{" "}
+            <span className="brand-gradient-text">
+              {t("pillarsTitleBrand")}
+            </span>
           </h2>
         </FadeUp>
       </div>
       <Stagger className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        {PILLARS.map((p, i) => (
-          <StaggerItem
-            key={p.title}
-            className="rounded-3xl soft-card p-6"
-          >
+        {PILLARS.map((key, i) => (
+          <StaggerItem key={key} className="rounded-3xl soft-card p-6">
             <span className="brand-gradient grid h-10 w-10 place-items-center rounded-2xl text-sm font-display font-semibold text-white">
               {String(i + 1).padStart(2, "0")}
             </span>
             <h3 className="mt-4 font-display text-lg font-semibold tracking-tight text-ink-900">
-              {p.title}
+              {tPillars(`${key}.title`)}
             </h3>
-            <p className="mt-2 text-sm text-ink-500">{p.body}</p>
+            <p className="mt-2 text-sm text-ink-500">
+              {tPillars(`${key}.body`)}
+            </p>
           </StaggerItem>
         ))}
       </Stagger>
@@ -248,36 +259,29 @@ function PillarsSection() {
 }
 
 function FamilySection() {
+  const t = useTranslations("home");
   return (
     <section className="mx-auto max-w-7xl px-6 pb-20">
       <FadeUp>
         <div className="grid gap-10 rounded-[2.5rem] soft-card overflow-hidden md:grid-cols-12">
           <div className="md:col-span-7 p-8 md:p-12">
             <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-lime-300">
-              More than a patient
+              {t("familyEyebrow")}
             </span>
             <h2 className="mt-3 font-display text-3xl font-semibold leading-tight tracking-tight text-ink-900 md:text-4xl">
-              You&apos;re family.
+              {t("familyTitle")}
             </h2>
             <p className="mt-5 text-lg leading-8 text-ink-700">
-              Our customer-service model — brought from the U.S. by our
-              founder — runs through every shift: 24/7 care, friendly nursing
-              staff, and a clean, respectful environment that treats every
-              patient with the dignity they deserve.
+              {t("familyBody")}
             </p>
             <ul className="mt-6 grid gap-3 sm:grid-cols-2">
-              {[
-                "24/7 emergency care",
-                "Friendly, attentive nursing staff",
-                "Clean & respectful environment",
-                "Transparent communication",
-              ].map((line) => (
+              {[1, 2, 3, 4].map((n) => (
                 <li
-                  key={line}
+                  key={n}
                   className="flex items-center gap-2 text-sm text-ink-700"
                 >
                   <span className="h-1.5 w-1.5 rounded-full bg-brand-lime-500" />
-                  {line}
+                  {t(`familyBullet${n}` as const)}
                 </li>
               ))}
             </ul>
@@ -298,37 +302,10 @@ function FamilySection() {
   );
 }
 
-function BlogSection() {
-  return (
-    <section className="mx-auto max-w-7xl px-6 py-20 md:py-28">
-      <div className="mb-10 flex items-end justify-between gap-6">
-        <FadeUp className="max-w-2xl">
-          <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-blue-200">
-            From the blog
-          </span>
-          <h2 className="mt-3 font-display text-3xl font-semibold leading-tight tracking-tight text-ink-900 md:text-5xl">
-            Health tips & hospital updates
-          </h2>
-        </FadeUp>
-        <FadeUp delay={0.05}>
-          <Link
-            href="/blog"
-            className="dark-glass inline-flex items-center gap-1 rounded-full px-4 py-2 text-sm font-semibold text-ink-700 transition-colors hover:text-white"
-          >
-            All articles <ArrowRight className="h-4 w-4" />
-          </Link>
-        </FadeUp>
-      </div>
-      <div className="grid gap-5 md:grid-cols-3">
-        {POSTS.map((p, i) => (
-          <BlogCard key={p.slug} post={p} index={i} />
-        ))}
-      </div>
-    </section>
-  );
-}
-
 function CtaSection() {
+  const t = useTranslations("home");
+  const tCta = useTranslations("cta");
+  const tHospital = useTranslations("hospital");
   return (
     <section className="mx-auto max-w-7xl px-6 pb-20">
       <FadeUp>
@@ -336,11 +313,12 @@ function CtaSection() {
           <div className="relative z-10 flex flex-col items-start gap-6 md:flex-row md:items-center md:justify-between">
             <div className="max-w-2xl">
               <h3 className="font-display text-3xl font-semibold leading-tight tracking-tight md:text-4xl">
-                Need care today? We&apos;re open 24/7.
+                {t("ctaTitle")}
               </h3>
               <p className="mt-3 text-white/85">
-                Walk in at {HOSPITAL.location.landmark} — or reserve your slot
-                online and skip the queue.
+                {t("ctaSubtitle", {
+                  landmark: tHospital("locationLandmark"),
+                })}
               </p>
             </div>
             <div className="flex flex-wrap gap-3">
@@ -348,7 +326,7 @@ function CtaSection() {
                 href="/appointment"
                 className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 font-semibold text-brand-blue-700 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5"
               >
-                Book online <ArrowRight className="h-4 w-4" />
+                {tCta("bookOnline")} <ArrowRight className="h-4 w-4" />
               </Link>
               <a
                 href={`tel:${HOSPITAL.phones[1].replace(/\s/g, "")}`}
