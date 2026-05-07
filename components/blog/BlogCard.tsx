@@ -1,20 +1,43 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { Clock, ArrowUpRight } from "lucide-react";
 import { motion } from "framer-motion";
-import type { Post } from "@/lib/hospital";
+import { useLocale, useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
-const formatter = new Intl.DateTimeFormat("en-US", {
-  month: "short",
-  day: "numeric",
-  year: "numeric",
-});
+export type BlogCardPost = {
+  slug: string;
+  title: string;
+  excerpt: string;
+  category: string;
+  readMinutes: number;
+  date: string;
+  image: string;
+};
 
-export function BlogCard({ post, index = 0 }: { post: Post; index?: number }) {
+export function BlogCard({
+  post,
+  index = 0,
+}: {
+  post: BlogCardPost;
+  index?: number;
+}) {
+  const locale = useLocale();
+  const tCta = useTranslations("cta");
+  const tCommon = useTranslations("common");
+
+  const formatter = new Intl.DateTimeFormat(
+    locale === "fr" ? "fr-FR" : "en-US",
+    {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    },
+  );
+
   return (
     <motion.article
       initial={{ opacity: 0, y: 24 }}
@@ -43,7 +66,8 @@ export function BlogCard({ post, index = 0 }: { post: Post; index?: number }) {
             </time>
             <span className="h-1 w-1 rounded-full bg-ink-300" />
             <span className="inline-flex items-center gap-1">
-              <Clock className="h-3.5 w-3.5" /> {post.readMinutes} min read
+              <Clock className="h-3.5 w-3.5" />{" "}
+              {tCommon("minRead", { count: post.readMinutes })}
             </span>
           </div>
           <h3 className="font-display text-xl font-semibold leading-snug tracking-tight text-ink-900 group-hover:text-brand-blue-200">
@@ -51,7 +75,7 @@ export function BlogCard({ post, index = 0 }: { post: Post; index?: number }) {
           </h3>
           <p className="text-ink-500">{post.excerpt}</p>
           <span className="mt-auto inline-flex items-center gap-1 text-sm font-semibold text-brand-blue-200">
-            Read article
+            {tCta("readArticle")}
             <ArrowUpRight className="h-4 w-4 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           </span>
         </div>

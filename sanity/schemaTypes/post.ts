@@ -8,6 +8,12 @@ export const post = defineType({
   icon: DocumentTextIcon,
   fields: [
     defineField({
+      name: "language",
+      type: "string",
+      readOnly: true,
+      hidden: true,
+    }),
+    defineField({
       name: "title",
       title: "Title",
       type: "string",

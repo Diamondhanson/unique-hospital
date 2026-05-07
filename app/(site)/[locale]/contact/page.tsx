@@ -1,23 +1,47 @@
 import type { Metadata } from "next";
 import { MapPin, Phone, Mail, Clock4 } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { getTranslations, setRequestLocale } from "next-intl/server";
+
 import { HOSPITAL } from "@/lib/hospital";
 import { FadeUp, Stagger, StaggerItem } from "@/components/motion/Reveal";
+import type { Locale } from "@/i18n/routing";
 
-export const metadata: Metadata = {
-  title: "Contact",
-  description:
-    "Visit us in Bonaberi-Douala or call (+237) 652 775 214. Open 24/7.",
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: Locale }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "contactPage" });
+  return {
+    title: t("metaTitle"),
+    description: t("metaDescription"),
+  };
+}
 
-export default function ContactPage() {
+export default async function ContactPage({
+  params,
+}: {
+  params: Promise<{ locale: Locale }>;
+}) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+  return <ContactContent />;
+}
+
+function ContactContent() {
+  const t = useTranslations("contactPage");
+  const tHospital = useTranslations("hospital");
+
   return (
     <>
       <section className="grid-noise px-6 pb-12 pt-12 md:pb-16 md:pt-16">
         <div className="mx-auto max-w-4xl text-center">
           <FadeUp>
             <h1 className="font-display text-4xl font-semibold leading-[1.05] tracking-tight text-ink-900 md:text-6xl">
-              Visit, call, or write —{" "}
-              <span className="brand-gradient-text">we&apos;re always open.</span>
+              {t("titlePre")}{" "}
+              <span className="brand-gradient-text">{t("titleBrand")}</span>
             </h1>
           </FadeUp>
         </div>
@@ -30,17 +54,17 @@ export default function ContactPage() {
               <MapPin className="h-5 w-5" />
             </span>
             <h3 className="mt-4 font-display text-xl font-semibold tracking-tight">
-              Find us
+              {t("findUs")}
             </h3>
             <p className="mt-2 text-ink-500">
-              {HOSPITAL.location.area}
+              {tHospital("locationArea")}
               <br />
-              {HOSPITAL.location.landmark}
+              {tHospital("locationLandmark")}
               <br />
-              {HOSPITAL.location.neighborhood}
+              {tHospital("locationNeighborhood")}
               <br />
               <span className="text-ink-700">
-                {HOSPITAL.location.district}
+                {tHospital("locationDistrict")}
               </span>
             </p>
           </StaggerItem>
@@ -49,7 +73,7 @@ export default function ContactPage() {
               <Phone className="h-5 w-5" />
             </span>
             <h3 className="mt-4 font-display text-xl font-semibold tracking-tight">
-              Call 24/7
+              {t("call247")}
             </h3>
             <ul className="mt-2 space-y-1">
               {HOSPITAL.phones.map((phone) => (
@@ -69,7 +93,7 @@ export default function ContactPage() {
               <Mail className="h-5 w-5" />
             </span>
             <h3 className="mt-4 font-display text-xl font-semibold tracking-tight">
-              Email
+              {t("email")}
             </h3>
             <p className="mt-2">
               <a
@@ -80,7 +104,7 @@ export default function ContactPage() {
               </a>
             </p>
             <p className="mt-3 inline-flex items-center gap-2 text-sm text-ink-500">
-              <Clock4 className="h-4 w-4" /> Reply within 24h
+              <Clock4 className="h-4 w-4" /> {t("replyWithin")}
             </p>
           </StaggerItem>
         </Stagger>
@@ -88,7 +112,7 @@ export default function ContactPage() {
         <FadeUp className="mt-10">
           <div className="overflow-hidden rounded-[2rem] soft-card">
             <iframe
-              title="Unique Hospital location"
+              title={t("mapTitle")}
               src="https://www.openstreetmap.org/export/embed.html?bbox=9.66%2C4.06%2C9.72%2C4.10&layer=mapnik&marker=4.082%2C9.692"
               loading="lazy"
               className="h-[420px] w-full border-0"
