@@ -5,6 +5,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { HOSPITAL } from "@/lib/hospital";
 import { FadeUp, Stagger, StaggerItem } from "@/components/motion/Reveal";
+import { ContactForm } from "@/components/contact/ContactForm";
 import type { Locale } from "@/i18n/routing";
 
 export async function generateMetadata({
@@ -109,7 +110,20 @@ function ContactContent() {
           </StaggerItem>
         </Stagger>
 
-        <FadeUp className="mt-10">
+        <FadeUp className="mt-12">
+          <div className="grid gap-2 text-center md:gap-3">
+            <h2 className="font-display text-3xl font-semibold tracking-tight text-ink-900 md:text-4xl">
+              {t("formTitle")}
+            </h2>
+            <p className="mx-auto max-w-2xl text-ink-500">{t("formSubtitle")}</p>
+          </div>
+        </FadeUp>
+
+        <FadeUp className="mt-8">
+          <ContactForm />
+        </FadeUp>
+
+        <FadeUp className="mt-12">
           <div className="overflow-hidden rounded-[2rem] soft-card">
             <iframe
               title={t("mapTitle")}

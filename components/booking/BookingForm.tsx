@@ -5,8 +5,9 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { motion, AnimatePresence } from "framer-motion";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import {
+  AlertCircle,
   ArrowLeft,
   ArrowRight,
   Check,
@@ -45,6 +46,7 @@ export function BookingForm() {
   const t = useTranslations("booking");
   const tCta = useTranslations("cta");
   const tServices = useTranslations("services");
+  const locale = useLocale();
 
   const schema = z.object({
     fullName: z.string().min(2, t("errorFullName")),
@@ -72,6 +74,7 @@ export function BookingForm() {
 
   const [step, setStep] = useState(0);
   const [submitted, setSubmitted] = useState(false);
+  const [serverError, setServerError] = useState<string | null>(null);
 
   const {
     register,
@@ -103,9 +106,31 @@ export function BookingForm() {
 
   const back = () => setStep((s) => Math.max(s - 1, 0));
 
-  const onSubmit = async (_values: FormValues) => {
-    await new Promise((r) => setTimeout(r, 700));
-    setSubmitted(true);
+  const onSubmit = async (values: FormValues) => {
+    setServerError(null);
+    try {
+      const res = await fetch("/api/appointment", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...values, locale }),
+      });
+
+      if (!res.ok) {
+        let msg = t("errorGeneric");
+        try {
+          const data = (await res.json()) as { error?: string };
+          if (data?.error) msg = data.error;
+        } catch {
+          // response wasn't JSON — keep generic message
+        }
+        setServerError(msg);
+        return;
+      }
+
+      setSubmitted(true);
+    } catch {
+      setServerError(t("errorNetwork"));
+    }
   };
 
   if (submitted) {
@@ -299,6 +324,21 @@ export function BookingForm() {
           </motion.div>
         </AnimatePresence>
       </div>
+
+      {serverError && (
+        <motion.div
+          role="alert"
+          initial={{ opacity: 0, y: 6 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mt-6 flex items-start gap-3 rounded-2xl border border-red-500/30 bg-red-500/10 p-4 text-sm text-red-700"
+        >
+          <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
+          <div>
+            <div className="font-semibold">{t("errorTitle")}</div>
+            <div className="mt-0.5 text-red-600/90">{serverError}</div>
+          </div>
+        </motion.div>
+      )}
 
       <div className="mt-8 flex items-center justify-between gap-3">
         <button
