@@ -4,7 +4,6 @@ import {
   Phone,
   ShieldCheck,
   Clock4,
-  Sparkles,
   Stethoscope,
   HeartPulse,
 } from "lucide-react";
@@ -47,18 +46,17 @@ function Hero() {
     <section className="relative overflow-hidden grid-noise">
       <div className="mx-auto grid max-w-7xl gap-10 px-6 pb-16 pt-12 md:grid-cols-12 md:gap-12 md:pb-24 md:pt-16">
         <div className="md:col-span-7">
-          <FadeUp>
-            <span className="dark-glass inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold text-brand-blue-200">
-              <Sparkles className="h-3.5 w-3.5" />
-              {tHospital("slogan")} · {t("heroBadgeLocation")}
-            </span>
-          </FadeUp>
           <FadeUp delay={0.05}>
-            <h1 className="mt-5 font-display text-4xl font-semibold leading-[1.05] tracking-tight text-ink-900 sm:text-5xl md:text-6xl">
+            <h1 className="brand-gradient-text font-display text-5xl font-semibold uppercase leading-[1.05] tracking-tight sm:text-6xl md:text-7xl">
+              {HOSPITAL.name}
+            </h1>
+          </FadeUp>
+          <FadeUp delay={0.1}>
+            <p className="mt-3 font-display text-2xl font-semibold leading-tight tracking-tight text-ink-900 sm:text-3xl md:text-4xl">
               {t("heroTitlePre")}{" "}
               <span className="brand-gradient-text">{t("heroTitleBrand")}</span>{" "}
               {t("heroTitlePost")}
-            </h1>
+            </p>
           </FadeUp>
           <FadeUp delay={0.1}>
             <p className="mt-5 max-w-xl text-lg leading-8 text-ink-500">

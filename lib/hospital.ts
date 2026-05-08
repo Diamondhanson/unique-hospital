@@ -4,7 +4,7 @@ export const HOSPITAL = {
   founder: "Franklin Kehbuma",
   founderCredentials: "RN, BSN",
   phones: ["+237 652 775 214", "+237 676 621 850"],
-  email: "hello@uniquehospital.cm",
+  email: "uniquehospitalbonaberi@gmail.com",
   social: {
     facebook: "https://facebook.com/UniqueHospital",
   },
