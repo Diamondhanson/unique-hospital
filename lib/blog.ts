@@ -1,5 +1,4 @@
-import type { ImageUrlBuilder } from "@sanity/image-url/lib/types/builder";
-import type { SanityImageSource } from "@sanity/image-url/lib/types/types";
+import type { ImageUrlBuilder, SanityImageSource } from "@sanity/image-url";
 import type { BlogCardPost } from "@/components/blog/BlogCard";
 
 export type SanityListPost = {
