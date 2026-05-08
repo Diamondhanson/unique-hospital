@@ -66,8 +66,8 @@ function AboutContent({ locale }: { locale: Locale }) {
         <FadeUp className="md:col-span-6">
           <div className="relative aspect-[4/5] overflow-hidden rounded-[2.5rem] soft-card">
             <Image
-              src="https://images.unsplash.com/photo-1538108149393-fbbd81895907?auto=format&fit=crop&w=1400&q=80"
-              alt="Unique Hospital lobby"
+              src="/images/lobby.jpg"
+              alt="Unique Hospital reception"
               fill
               sizes="(max-width: 768px) 100vw, 40vw"
               className="object-cover"
@@ -156,7 +156,7 @@ function AboutContent({ locale }: { locale: Locale }) {
           <FadeUp delay={0.08} className="md:col-span-6">
             <div className="relative aspect-[4/3] overflow-hidden rounded-[2rem] border border-white/10">
               <Image
-                src="https://images.unsplash.com/photo-1631815589968-fdb09a223b1e?auto=format&fit=crop&w=1400&q=80"
+                src="/images/paramedical-training.jpg"
                 alt="Paramedical Institute students in training"
                 fill
                 sizes="(max-width: 768px) 100vw, 50vw"

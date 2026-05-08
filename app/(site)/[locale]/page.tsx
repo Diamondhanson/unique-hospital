@@ -95,8 +95,8 @@ function Hero() {
           <div className="relative">
             <div className="relative aspect-[4/5] overflow-hidden rounded-[2.5rem] soft-card">
               <Image
-                src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=1400&q=80"
-                alt="Unique Hospital clinical team"
+                src="/images/doctor-portrait.jpg"
+                alt="Unique Hospital clinician"
                 fill
                 preload
                 sizes="(max-width: 768px) 100vw, 40vw"
@@ -288,8 +288,8 @@ function FamilySection() {
           </div>
           <div className="md:col-span-5 relative min-h-[280px]">
             <Image
-              src="https://images.unsplash.com/photo-1666214280557-f1b5022eb634?auto=format&fit=crop&w=1400&q=80"
-              alt="Unique Hospital nursing team"
+              src="/images/nurse-portrait.jpg"
+              alt="Unique Hospital nurse"
               fill
               sizes="(max-width: 768px) 100vw, 40vw"
               className="object-cover"

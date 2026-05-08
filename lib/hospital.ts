@@ -23,29 +23,25 @@ export const SERVICE_DEFS = [
     slug: "specialized-care",
     icon: "Baby",
     accent: "from-brand-blue-500 to-brand-blue-700",
-    image:
-      "https://images.unsplash.com/photo-1516841273335-e39b37888115?auto=format&fit=crop&w=1600&q=80",
+    image: "/images/service-specialized-care.jpg",
   },
   {
     slug: "surgical-expertise",
     icon: "Stethoscope",
     accent: "from-brand-blue-600 to-brand-lime-500",
-    image:
-      "https://images.unsplash.com/photo-1551076805-e1869033e561?auto=format&fit=crop&w=1600&q=80",
+    image: "/images/service-surgical.jpg",
   },
   {
     slug: "diagnostic-support",
     icon: "FlaskConical",
     accent: "from-brand-lime-500 to-brand-blue-500",
-    image:
-      "https://images.unsplash.com/photo-1581595219315-a187dd40c322?auto=format&fit=crop&w=1600&q=80",
+    image: "/images/service-diagnostic.jpg",
   },
   {
     slug: "community-health",
     icon: "HeartHandshake",
     accent: "from-brand-lime-600 to-brand-blue-600",
-    image:
-      "https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?auto=format&fit=crop&w=1600&q=80",
+    image: "/images/service-community.jpg",
   },
 ] as const;
 

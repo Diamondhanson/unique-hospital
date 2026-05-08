@@ -40,8 +40,7 @@ export const POST_BY_SLUG_QUERY = `*[_type == "post" && slug.current == $slug &&
   "bodyLength": length(pt::text(body))
 }`;
 
-const FALLBACK_IMAGE =
-  "https://images.unsplash.com/photo-1505751172876-fa1923c5c528?auto=format&fit=crop&w=1600&q=80";
+const FALLBACK_IMAGE = "/images/staff-lineup.jpg";
 
 export function toBlogCardPost(
   p: SanityListPost,
