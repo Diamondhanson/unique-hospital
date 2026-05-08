@@ -40,6 +40,7 @@
   "footer": {
     "findUs": "Find us",
     "explore": "Explore",
+    "connect": "Connect with us",
     "bridgeText": "Bridging international healthcare standards with local accessibility in Douala, Cameroon. {slogan}.",
     "sloganShort": "Service of the Heart · Bonaberi-Douala",
     "copyright": "© {year} {name}. Founded by {founder}."
@@ -253,6 +254,8 @@
     "call247": "Call 24/7",
     "email": "Email",
     "replyWithin": "Reply within 24h",
+    "quickConnect": "Quick connect",
+    "quickConnectBody": "Reach us on Facebook, WhatsApp, or send a quick email.",
     "mapTitle": "Unique Hospital location",
     "formTitle": "Send us a message",
     "formSubtitle": "Have a question, feedback, or want to schedule something specific? Write to us; we read every message and reply within 24 hours."

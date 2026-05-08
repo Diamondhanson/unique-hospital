@@ -3,6 +3,7 @@ import { useTranslations } from "next-intl";
 import { MapPin, Phone, Mail } from "lucide-react";
 import { HOSPITAL, NAV_LINKS } from "@/lib/hospital";
 import { Link } from "@/i18n/navigation";
+import { SocialLinks } from "@/components/social/SocialLinks";
 
 export function Footer() {
   const tNav = useTranslations("nav");
@@ -40,6 +41,12 @@ export function Footer() {
                 <Phone className="h-4 w-4" /> {phone}
               </a>
             ))}
+          </div>
+          <div className="mt-6">
+            <h4 className="font-display text-xs font-semibold uppercase tracking-[0.18em] text-ink-500">
+              {tFooter("connect")}
+            </h4>
+            <SocialLinks size="md" className="mt-3" />
           </div>
         </div>
 

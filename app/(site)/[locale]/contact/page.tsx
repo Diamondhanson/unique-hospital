@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
-import { MapPin, Phone, Mail, Clock4 } from "lucide-react";
+import { MapPin, Phone, Mail, Clock4, Sparkles } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { HOSPITAL } from "@/lib/hospital";
 import { FadeUp, Stagger, StaggerItem } from "@/components/motion/Reveal";
 import { ContactForm } from "@/components/contact/ContactForm";
+import { SocialLinks } from "@/components/social/SocialLinks";
 import type { Locale } from "@/i18n/routing";
 
 export async function generateMetadata({
@@ -109,6 +110,25 @@ function ContactContent() {
             </p>
           </StaggerItem>
         </Stagger>
+
+        <FadeUp className="mt-6">
+          <div className="rounded-3xl soft-card flex flex-col items-start gap-4 p-6 md:flex-row md:items-center md:justify-between md:gap-8">
+            <div className="flex items-start gap-4">
+              <span className="brand-gradient grid h-11 w-11 shrink-0 place-items-center rounded-2xl text-white">
+                <Sparkles className="h-5 w-5" />
+              </span>
+              <div>
+                <h3 className="font-display text-xl font-semibold tracking-tight text-ink-900">
+                  {t("quickConnect")}
+                </h3>
+                <p className="mt-1 text-sm text-ink-500">
+                  {t("quickConnectBody")}
+                </p>
+              </div>
+            </div>
+            <SocialLinks size="md" />
+          </div>
+        </FadeUp>
 
         <FadeUp className="mt-12">
           <div className="grid gap-2 text-center md:gap-3">

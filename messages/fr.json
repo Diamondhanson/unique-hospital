@@ -40,6 +40,7 @@
   "footer": {
     "findUs": "Nous trouver",
     "explore": "Explorer",
+    "connect": "Suivez-nous",
     "bridgeText": "Un pont entre les normes internationales de santé et l'accessibilité locale à Douala, Cameroun. {slogan}.",
     "sloganShort": "Service du Cœur · Bonaberi-Douala",
     "copyright": "© {year} {name}. Fondé par {founder}."
@@ -253,6 +254,8 @@
     "call247": "Appel 24h/24",
     "email": "E-mail",
     "replyWithin": "Réponse sous 24 h",
+    "quickConnect": "Connexion rapide",
+    "quickConnectBody": "Joignez-nous sur Facebook, WhatsApp ou par e-mail.",
     "mapTitle": "Emplacement de Unique Hospital",
     "formTitle": "Envoyez-nous un message",
     "formSubtitle": "Une question, un retour ou un besoin précis ? Écrivez-nous : nous lisons chaque message et répondons sous 24 heures."

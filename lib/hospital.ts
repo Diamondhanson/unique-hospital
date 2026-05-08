@@ -5,8 +5,11 @@ export const HOSPITAL = {
   founderCredentials: "RN, BSN",
   phones: ["+237 676 621 850"],
   email: "uniquehospitalbonaberi@gmail.com",
+  whatsapp: "237676621850",
   social: {
-    facebook: "https://facebook.com/UniqueHospital",
+    facebook:
+      "https://www.facebook.com/profile.php?id=100087249619339",
+    whatsapp: "https://wa.me/237676621850",
   },
 } as const;
 
