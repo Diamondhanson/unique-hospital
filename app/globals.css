@@ -140,6 +140,31 @@
     linear-gradient(180deg, var(--color-background), var(--color-paper));
 }
 
+/* Ken Burns zoom for the hero background carousel.
+   Each image's wrapper is remounted on activation (via React key), which
+   restarts the animation from frame 0 — alternating zoom-in/zoom-out
+   per slide gives the carousel a subtle parallax feel. */
+@keyframes hero-kb-in {
+  from { transform: scale(1); }
+  to { transform: scale(1.12); }
+}
+@keyframes hero-kb-out {
+  from { transform: scale(1.12); }
+  to { transform: scale(1); }
+}
+.hero-kb-in {
+  animation: hero-kb-in 4s linear forwards;
+}
+.hero-kb-out {
+  animation: hero-kb-out 4s linear forwards;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-kb-in,
+  .hero-kb-out {
+    animation: none;
+  }
+}
+
 /* === Light mode overrides ===
    The site's surfaces and elevation accents are written with literal
    white-alpha utilities (bg-white/5, border-white/10, etc.) that read

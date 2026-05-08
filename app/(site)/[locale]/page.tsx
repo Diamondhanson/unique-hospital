@@ -13,6 +13,7 @@ import { HOSPITAL, STATS, PILLARS } from "@/lib/hospital";
 import { Link } from "@/i18n/navigation";
 import { FadeUp, Stagger, StaggerItem } from "@/components/motion/Reveal";
 import { BentoServices } from "@/components/sections/BentoServices";
+import { HeroBackdrop } from "@/components/sections/HeroBackdrop";
 import { HomeBlogSection } from "@/components/sections/HomeBlogSection";
 import type { Locale } from "@/i18n/routing";
 
@@ -44,7 +45,8 @@ function Hero() {
 
   return (
     <section className="relative overflow-hidden grid-noise">
-      <div className="mx-auto grid max-w-7xl gap-10 px-6 pb-16 pt-12 md:grid-cols-12 md:gap-12 md:pb-24 md:pt-16">
+      <HeroBackdrop />
+      <div className="relative z-10 mx-auto grid max-w-7xl gap-10 px-6 pb-16 pt-12 md:grid-cols-12 md:gap-12 md:pb-24 md:pt-16">
         <div className="md:col-span-7">
           <FadeUp delay={0.05}>
             <h1 className="brand-gradient-text font-display text-5xl font-semibold uppercase leading-[1.05] tracking-tight sm:text-6xl md:text-7xl">
