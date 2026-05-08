@@ -130,13 +130,13 @@ function Hero() {
               </div>
             </div>
 
-            <div className="absolute -right-4 bottom-24 hidden rounded-2xl bg-paper border border-white/10 px-4 py-3 text-white sm:flex sm:items-center sm:gap-3">
+            <div className="absolute -right-4 bottom-24 hidden rounded-2xl bg-paper border border-white/10 px-4 py-3 text-foreground sm:flex sm:items-center sm:gap-3">
               <Stethoscope className="h-5 w-5 text-brand-lime-500" />
               <div>
                 <div className="text-sm font-semibold">
                   {tCommon("usStandardCare")}
                 </div>
-                <div className="text-xs text-white/70">
+                <div className="text-xs text-ink-500">
                   {tCommon("guidedProtocols")}
                 </div>
               </div>
@@ -182,7 +182,7 @@ function ServicesSection() {
 function PhilosophySection() {
   const t = useTranslations("home");
   return (
-    <section className="relative overflow-hidden bg-paper text-white">
+    <section className="relative overflow-hidden bg-paper text-foreground">
       <div className="mx-auto grid max-w-7xl gap-10 px-6 py-24 md:grid-cols-12">
         <FadeUp className="md:col-span-5">
           <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-lime-500">
@@ -193,7 +193,7 @@ function PhilosophySection() {
           </h2>
         </FadeUp>
         <FadeUp delay={0.08} className="md:col-span-7">
-          <p className="text-lg leading-8 text-white/80">
+          <p className="text-lg leading-8 text-ink-700">
             {t("philosophyBody")}
           </p>
           <Stagger className="mt-8 grid gap-4 sm:grid-cols-3">
@@ -205,7 +205,7 @@ function PhilosophySection() {
                 <div className="font-display text-lg font-semibold">
                   {t(`philosophyPillar${n}Title` as const)}
                 </div>
-                <div className="mt-1 text-sm text-white/70">
+                <div className="mt-1 text-sm text-ink-500">
                   {t(`philosophyPillar${n}Body` as const)}
                 </div>
               </StaggerItem>
@@ -327,11 +327,11 @@ function CtaSection() {
                 {tCta("bookOnline")} <ArrowRight className="h-4 w-4" />
               </Link>
               <a
-                href={`tel:${HOSPITAL.phones[1].replace(/\s/g, "")}`}
+                href={`tel:${HOSPITAL.phones[0].replace(/\s/g, "")}`}
                 className="inline-flex items-center gap-2 rounded-full border border-white/40 px-5 py-3 font-semibold text-white hover:bg-white/10"
               >
                 <Phone className="h-4 w-4" />
-                {HOSPITAL.phones[1]}
+                {HOSPITAL.phones[0]}
               </a>
             </div>
           </div>

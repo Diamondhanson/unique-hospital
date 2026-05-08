@@ -3,11 +3,12 @@
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
-import { Menu, X, Phone, ChevronDown } from "lucide-react";
+import { Menu, X, ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { HOSPITAL, NAV_LINKS } from "@/lib/hospital";
 import { Link, usePathname, useRouter } from "@/i18n/navigation";
 import { ServicesDropdown } from "@/components/layout/ServicesDropdown";
+import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import type { Locale } from "@/i18n/routing";
 
 export function Navbar() {
@@ -63,13 +64,7 @@ export function Navbar() {
 
         <div className="hidden items-center gap-2 md:flex">
           <LangToggle />
-          <a
-            href={`tel:${HOSPITAL.phones[0].replace(/\s/g, "")}`}
-            className="flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-2 text-sm text-ink-700 transition-colors hover:border-brand-blue-300 hover:text-white"
-          >
-            <Phone className="h-4 w-4" />
-            <span className="font-medium">24/7</span>
-          </a>
+          <ThemeToggle />
           <Link
             href="/appointment"
             className="brand-gradient rounded-full px-4 py-2 text-sm font-semibold text-white shadow-glow transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5"
@@ -111,6 +106,9 @@ export function Navbar() {
                   </Link>
                 </li>
               ))}
+              <li className="mt-2">
+                <ThemeToggle variant="menu" />
+              </li>
               <li className="mt-2">
                 <Link
                   href="/appointment"

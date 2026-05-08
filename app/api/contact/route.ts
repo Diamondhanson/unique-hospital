@@ -53,7 +53,7 @@ export async function POST(request: Request) {
       from,
       to: [inbox],
       replyTo: email,
-      subject: `New contact form — ${subject}`,
+      subject: `New contact form: ${subject}`,
       html: renderEmail({ fullName, email, phone, subject, message, locale }),
       text: renderEmailText({ fullName, email, phone, subject, message, locale }),
     });
@@ -133,7 +133,7 @@ function renderEmail({ fullName, email, phone, subject, message, locale }: Email
             </tr>
             <tr>
               <td style="padding:18px 32px;background:#f8fafc;border-top:1px solid #e2e8f0;font-size:12px;color:#64748b;">
-                Sent from the contact form on uniquehospital.com — reply directly to this email to respond.
+                Sent from the contact form on uniquehospital.com. Reply directly to this email to respond.
               </td>
             </tr>
           </table>
@@ -155,7 +155,7 @@ function row(label: string, value: string) {
 
 function renderEmailText({ fullName, email, phone, subject, message, locale }: EmailFields) {
   return [
-    "New contact form submission — Unique Hospital",
+    "New contact form submission · Unique Hospital",
     "",
     `Name:    ${fullName}`,
     `Email:   ${email}`,

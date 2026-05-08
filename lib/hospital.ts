@@ -3,7 +3,7 @@ export const HOSPITAL = {
   founded: "2022-08-08",
   founder: "Franklin Kehbuma",
   founderCredentials: "RN, BSN",
-  phones: ["+237 652 775 214", "+237 676 621 850"],
+  phones: ["+237 676 621 850"],
   email: "uniquehospitalbonaberi@gmail.com",
   social: {
     facebook: "https://facebook.com/UniqueHospital",

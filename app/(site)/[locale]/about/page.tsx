@@ -140,7 +140,74 @@ function AboutContent({ locale }: { locale: Locale }) {
         </Stagger>
       </section>
 
-      <section className="bg-paper text-white">
+      <section className="mx-auto max-w-7xl px-6 py-16 md:py-20">
+        <div className="max-w-2xl">
+          <FadeUp>
+            <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-blue-200">
+              {t("insideEyebrow")}
+            </span>
+            <h2 className="mt-3 font-display text-3xl font-semibold leading-tight tracking-tight text-ink-900 md:text-4xl">
+              {t("insideTitlePre")}{" "}
+              <span className="brand-gradient-text">
+                {t("insideTitleBrand")}
+              </span>
+            </h2>
+            <p className="mt-5 text-lg leading-8 text-ink-500">
+              {t("insideBody")}
+            </p>
+          </FadeUp>
+        </div>
+
+        <Stagger className="mt-10 grid grid-cols-1 gap-4 md:grid-cols-12">
+          <StaggerItem className="md:col-span-7">
+            <FacilityCard
+              src="/images/about-surgery.jpg"
+              alt={t("insideSurgeryTitle")}
+              title={t("insideSurgeryTitle")}
+              body={t("insideSurgeryBody")}
+              aspect="aspect-[16/10] md:aspect-[16/9]"
+            />
+          </StaggerItem>
+          <StaggerItem className="md:col-span-5">
+            <FacilityCard
+              src="/images/about-reception.jpg"
+              alt={t("insideReceptionTitle")}
+              title={t("insideReceptionTitle")}
+              body={t("insideReceptionBody")}
+              aspect="aspect-[4/5] md:aspect-[16/9]"
+            />
+          </StaggerItem>
+          <StaggerItem className="md:col-span-4">
+            <FacilityCard
+              src="/images/about-lab.jpg"
+              alt={t("insideLabTitle")}
+              title={t("insideLabTitle")}
+              body={t("insideLabBody")}
+              aspect="aspect-[4/5]"
+            />
+          </StaggerItem>
+          <StaggerItem className="md:col-span-4">
+            <FacilityCard
+              src="/images/about-hospital-room.jpg"
+              alt={t("insideRoomTitle")}
+              title={t("insideRoomTitle")}
+              body={t("insideRoomBody")}
+              aspect="aspect-[4/5]"
+            />
+          </StaggerItem>
+          <StaggerItem className="md:col-span-4">
+            <FacilityCard
+              src="/images/about-staff-team.jpg"
+              alt={t("insideTeamTitle")}
+              title={t("insideTeamTitle")}
+              body={t("insideTeamBody")}
+              aspect="aspect-[4/5]"
+            />
+          </StaggerItem>
+        </Stagger>
+      </section>
+
+      <section className="bg-paper text-foreground">
         <div className="mx-auto grid max-w-7xl gap-10 px-6 py-20 md:grid-cols-12 md:py-24">
           <FadeUp className="md:col-span-6">
             <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-lime-500">
@@ -149,7 +216,7 @@ function AboutContent({ locale }: { locale: Locale }) {
             <h2 className="mt-3 font-display text-3xl font-semibold leading-tight tracking-tight md:text-5xl">
               {t("instituteTitle")}
             </h2>
-            <p className="mt-5 text-lg leading-8 text-white/80">
+            <p className="mt-5 text-lg leading-8 text-ink-700">
               {t("instituteBody")}
             </p>
           </FadeUp>
@@ -168,5 +235,40 @@ function AboutContent({ locale }: { locale: Locale }) {
         </div>
       </section>
     </>
+  );
+}
+
+function FacilityCard({
+  src,
+  alt,
+  title,
+  body,
+  aspect,
+}: {
+  src: string;
+  alt: string;
+  title: string;
+  body: string;
+  aspect: string;
+}) {
+  return (
+    <div className="group flex h-full flex-col overflow-hidden rounded-bento soft-card">
+      <div className={`relative ${aspect} overflow-hidden`}>
+        <Image
+          src={src}
+          alt={alt}
+          fill
+          sizes="(max-width: 768px) 100vw, 33vw"
+          className="object-cover transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04]"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-ink-900/70 via-ink-900/10 to-transparent" />
+      </div>
+      <div className="flex flex-1 flex-col gap-2 p-5 md:p-6">
+        <h3 className="font-display text-lg font-semibold tracking-tight text-ink-900">
+          {title}
+        </h3>
+        <p className="text-sm leading-6 text-ink-500">{body}</p>
+      </div>
+    </div>
   );
 }

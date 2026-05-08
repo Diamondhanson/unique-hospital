@@ -200,7 +200,7 @@ function Detail({
         </Stagger>
       </section>
 
-      <section className="bg-paper text-white">
+      <section className="bg-paper text-foreground">
         <div className="mx-auto max-w-7xl px-6 py-16 md:py-20">
           <FadeUp>
             <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
@@ -218,7 +218,7 @@ function Detail({
                 {[1, 2, 3].map((n) => (
                   <li
                     key={n}
-                    className="flex items-center gap-2 text-sm text-white/80"
+                    className="flex items-center gap-2 text-sm text-ink-700"
                   >
                     <Check className="h-4 w-4 text-brand-lime-500" />
                     {t(`ecosystemBullet${n}` as const)}

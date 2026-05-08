@@ -82,7 +82,7 @@ export async function POST(request: Request) {
       from,
       to: [inbox],
       replyTo: email,
-      subject: `New appointment — ${fullName} · ${serviceLabel}`,
+      subject: `New appointment: ${fullName} · ${serviceLabel}`,
       html: renderEmail({
         fullName,
         serviceLabel,
@@ -209,7 +209,7 @@ function renderEmail({
             </tr>
             <tr>
               <td style="padding:18px 32px;background:#f8fafc;border-top:1px solid #e2e8f0;font-size:12px;color:#64748b;">
-                Sent from the appointment form on uniquehospital.com — reply directly to confirm with the patient.
+                Sent from the appointment form on uniquehospital.com. Reply directly to confirm with the patient.
               </td>
             </tr>
           </table>
@@ -240,7 +240,7 @@ function renderEmailText({
   locale,
 }: EmailFields) {
   return [
-    "New appointment request — Unique Hospital",
+    "New appointment request · Unique Hospital",
     "",
     `Patient: ${fullName}`,
     `Service: ${serviceLabel}`,

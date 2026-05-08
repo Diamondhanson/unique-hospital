@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans, Fraunces } from "next/font/google";
+import Script from "next/script";
 import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations, setRequestLocale } from "next-intl/server";
@@ -7,6 +8,10 @@ import { getMessages, getTranslations, setRequestLocale } from "next-intl/server
 import "../../globals.css";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
+import {
+  ThemeProvider,
+  themeBootstrapScript,
+} from "@/components/theme/ThemeProvider";
 import { routing, type Locale } from "@/i18n/routing";
 
 const sans = Plus_Jakarta_Sans({
@@ -74,13 +79,22 @@ export default async function LocaleLayout({
       lang={locale}
       data-scroll-behavior="smooth"
       className={`${sans.variable} ${display.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col">
-        <NextIntlClientProvider messages={messages} locale={locale}>
-          <Navbar />
-          <main className="flex-1 pt-3 sm:pt-4">{children}</main>
-          <Footer />
-        </NextIntlClientProvider>
+        <Script
+          id="theme-bootstrap"
+          strategy="beforeInteractive"
+        >
+          {themeBootstrapScript}
+        </Script>
+        <ThemeProvider>
+          <NextIntlClientProvider messages={messages} locale={locale}>
+            <Navbar />
+            <main className="flex-1 pt-3 sm:pt-4">{children}</main>
+            <Footer />
+          </NextIntlClientProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
