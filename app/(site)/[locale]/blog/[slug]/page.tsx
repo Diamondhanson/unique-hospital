@@ -14,6 +14,11 @@ import {
   POSTS_SLUGS_QUERY,
   type SanityFullPost,
 } from "@/lib/blog";
+import {
+  ArticleJsonLd,
+  BreadcrumbJsonLd,
+} from "@/components/seo/JsonLd";
+import { localizedAlternates, ogLocale, SITE } from "@/lib/seo";
 import { routing, type Locale } from "@/i18n/routing";
 
 export const revalidate = 60;
@@ -141,12 +146,32 @@ export async function generateMetadata({
     locale,
   });
   if (!post) return { title: t("postNotFound") };
+  const ogImage = post.mainImage
+    ? urlFor(post.mainImage).width(1200).height(630).url()
+    : SITE.defaultOgImage;
   return {
     title: post.title,
     description: post.excerpt,
-    openGraph: post.mainImage
-      ? { images: [urlFor(post.mainImage).width(1200).height(630).url()] }
-      : undefined,
+    alternates: localizedAlternates({
+      locale,
+      pathname: `/blog/${slug}`,
+    }),
+    openGraph: {
+      title: post.title,
+      description: post.excerpt,
+      type: "article",
+      url: `/${locale}/blog/${slug}`,
+      locale: ogLocale(locale),
+      siteName: SITE.name,
+      images: [{ url: ogImage, width: 1200, height: 630 }],
+      publishedTime: post.publishedAt,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description: post.excerpt,
+      images: [ogImage],
+    },
   };
 }
 
@@ -159,6 +184,7 @@ export default async function BlogPostPage({
   setRequestLocale(locale);
   const tBlog = await getTranslations({ locale, namespace: "blogPage" });
   const tCommon = await getTranslations({ locale, namespace: "common" });
+  const tNav = await getTranslations({ locale, namespace: "nav" });
 
   const post = await client.fetch<SanityFullPost | null>(POST_BY_SLUG_QUERY, {
     slug,
@@ -170,6 +196,9 @@ export default async function BlogPostPage({
   const heroSrc = post.mainImage
     ? urlFor(post.mainImage).width(2000).height(1100).url()
     : null;
+  const articleImage = post.mainImage
+    ? urlFor(post.mainImage).width(1200).height(630).url()
+    : undefined;
 
   const dateFormatter = new Intl.DateTimeFormat(
     locale === "fr" ? "fr-FR" : "en-US",
@@ -177,6 +206,21 @@ export default async function BlogPostPage({
   );
 
   return (
+    <>
+      <BreadcrumbJsonLd
+        items={[
+          { name: tNav("home"), path: `/${locale}` },
+          { name: tNav("blog"), path: `/${locale}/blog` },
+          { name: post.title, path: `/${locale}/blog/${slug}` },
+        ]}
+      />
+      <ArticleJsonLd
+        url={`/${locale}/blog/${slug}`}
+        headline={post.title}
+        description={post.excerpt}
+        image={articleImage}
+        datePublished={post.publishedAt}
+      />
     <article className="mx-auto max-w-3xl px-6 pb-24 pt-12 md:pt-16">
       <FadeUp>
         <Link
@@ -239,5 +283,6 @@ export default async function BlogPostPage({
         ) : null}
       </div>
     </article>
+    </>
   );
 }

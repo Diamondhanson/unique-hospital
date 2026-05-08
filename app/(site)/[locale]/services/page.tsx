@@ -6,6 +6,8 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { SERVICE_DEFS } from "@/lib/hospital";
 import { Link } from "@/i18n/navigation";
 import { FadeUp } from "@/components/motion/Reveal";
+import { BreadcrumbJsonLd } from "@/components/seo/JsonLd";
+import { localizedAlternates, ogLocale, SITE } from "@/lib/seo";
 import type { Locale } from "@/i18n/routing";
 
 export async function generateMetadata({
@@ -18,6 +20,22 @@ export async function generateMetadata({
   return {
     title: t("metaTitle"),
     description: t("metaDescription"),
+    alternates: localizedAlternates({ locale, pathname: "/services" }),
+    openGraph: {
+      title: t("metaTitle"),
+      description: t("metaDescription"),
+      type: "website",
+      url: `/${locale}/services`,
+      locale: ogLocale(locale),
+      siteName: SITE.name,
+      images: [{ url: "/images/service-surgical.jpg", width: 1200, height: 800 }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: t("metaTitle"),
+      description: t("metaDescription"),
+      images: ["/images/service-surgical.jpg"],
+    },
   };
 }
 
@@ -28,16 +46,23 @@ export default async function ServicesPage({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  return <ServicesContent />;
+  return <ServicesContent locale={locale} />;
 }
 
-function ServicesContent() {
+function ServicesContent({ locale }: { locale: Locale }) {
   const t = useTranslations("servicesPage");
   const tServices = useTranslations("services");
   const tCta = useTranslations("cta");
+  const tNav = useTranslations("nav");
 
   return (
     <>
+      <BreadcrumbJsonLd
+        items={[
+          { name: tNav("home"), path: `/${locale}` },
+          { name: tNav("services"), path: `/${locale}/services` },
+        ]}
+      />
       <section className="grid-noise px-6 pb-12 pt-12 md:pb-16 md:pt-16">
         <div className="mx-auto max-w-4xl text-center">
           <FadeUp>

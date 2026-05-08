@@ -17,6 +17,11 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { SERVICE_DEFS, HOSPITAL } from "@/lib/hospital";
 import { Link } from "@/i18n/navigation";
 import { FadeUp, Stagger, StaggerItem } from "@/components/motion/Reveal";
+import {
+  BreadcrumbJsonLd,
+  MedicalServiceJsonLd,
+} from "@/components/seo/JsonLd";
+import { localizedAlternates, ogLocale, SITE } from "@/lib/seo";
 import { routing, type Locale } from "@/i18n/routing";
 
 const ICONS = {
@@ -41,9 +46,30 @@ export async function generateMetadata({
   const t = await getTranslations({ locale, namespace: "services" });
   const service = SERVICE_DEFS.find((s) => s.slug === slug);
   if (!service) return { title: "Service not found" };
+  const title = t(`${slug}.title`);
+  const description = t(`${slug}.summary`);
   return {
-    title: t(`${slug}.title`),
-    description: t(`${slug}.summary`),
+    title,
+    description,
+    alternates: localizedAlternates({
+      locale,
+      pathname: `/services/${slug}`,
+    }),
+    openGraph: {
+      title,
+      description,
+      type: "article",
+      url: `/${locale}/services/${slug}`,
+      locale: ogLocale(locale),
+      siteName: SITE.name,
+      images: [{ url: service.image, width: 1200, height: 800, alt: title }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [service.image],
+    },
   };
 }
 
@@ -56,13 +82,15 @@ export default async function ServiceDetailPage({
   setRequestLocale(locale);
   const service = SERVICE_DEFS.find((s) => s.slug === slug);
   if (!service) notFound();
-  return <Detail slug={slug} service={service} />;
+  return <Detail locale={locale} slug={slug} service={service} />;
 }
 
 function Detail({
+  locale,
   slug,
   service,
 }: {
+  locale: Locale;
   slug: string;
   service: (typeof SERVICE_DEFS)[number];
 }) {
@@ -71,6 +99,7 @@ function Detail({
   const tCta = useTranslations("cta");
   const tHospital = useTranslations("hospital");
   const tCommon = useTranslations("common");
+  const tNav = useTranslations("nav");
 
   const Icon = ICONS[service.icon as keyof typeof ICONS];
   const others = SERVICE_DEFS.filter((s) => s.slug !== service.slug);
@@ -84,6 +113,19 @@ function Detail({
 
   return (
     <>
+      <BreadcrumbJsonLd
+        items={[
+          { name: tNav("home"), path: `/${locale}` },
+          { name: tNav("services"), path: `/${locale}/services` },
+          { name: title, path: `/${locale}/services/${slug}` },
+        ]}
+      />
+      <MedicalServiceJsonLd
+        name={title}
+        description={summary}
+        url={`/${locale}/services/${slug}`}
+        image={service.image}
+      />
       <section className="grid-noise relative overflow-hidden px-6 pb-16 pt-10 md:pb-24 md:pt-14">
         <div className="mx-auto max-w-7xl">
           <FadeUp>

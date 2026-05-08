@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { BlogCard } from "@/components/blog/BlogCard";
 import { FadeUp } from "@/components/motion/Reveal";
+import { BreadcrumbJsonLd } from "@/components/seo/JsonLd";
+import { localizedAlternates, ogLocale, SITE } from "@/lib/seo";
 import { client } from "@/sanity/lib/client";
 import { urlFor } from "@/sanity/lib/image";
 import {
@@ -23,6 +25,22 @@ export async function generateMetadata({
   return {
     title: t("metaTitle"),
     description: t("metaDescription"),
+    alternates: localizedAlternates({ locale, pathname: "/blog" }),
+    openGraph: {
+      title: t("metaTitle"),
+      description: t("metaDescription"),
+      type: "website",
+      url: `/${locale}/blog`,
+      locale: ogLocale(locale),
+      siteName: SITE.name,
+      images: [{ url: SITE.defaultOgImage, width: 1200, height: 800 }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: t("metaTitle"),
+      description: t("metaDescription"),
+      images: [SITE.defaultOgImage],
+    },
   };
 }
 
@@ -34,6 +52,7 @@ export default async function BlogPage({
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations({ locale, namespace: "blogPage" });
+  const tNav = await getTranslations({ locale, namespace: "nav" });
 
   const sanityPosts = await client.fetch<SanityListPost[]>(POSTS_LIST_QUERY, {
     locale,
@@ -44,6 +63,12 @@ export default async function BlogPage({
 
   return (
     <>
+      <BreadcrumbJsonLd
+        items={[
+          { name: tNav("home"), path: `/${locale}` },
+          { name: tNav("blog"), path: `/${locale}/blog` },
+        ]}
+      />
       <section className="grid-noise px-6 pb-12 pt-12 md:pb-16 md:pt-16">
         <div className="mx-auto max-w-4xl text-center">
           <FadeUp>

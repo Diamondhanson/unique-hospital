@@ -7,6 +7,8 @@ import { HOSPITAL } from "@/lib/hospital";
 import { FadeUp, Stagger, StaggerItem } from "@/components/motion/Reveal";
 import { ContactForm } from "@/components/contact/ContactForm";
 import { SocialLinks } from "@/components/social/SocialLinks";
+import { BreadcrumbJsonLd } from "@/components/seo/JsonLd";
+import { localizedAlternates, ogLocale, SITE } from "@/lib/seo";
 import type { Locale } from "@/i18n/routing";
 
 export async function generateMetadata({
@@ -19,6 +21,22 @@ export async function generateMetadata({
   return {
     title: t("metaTitle"),
     description: t("metaDescription"),
+    alternates: localizedAlternates({ locale, pathname: "/contact" }),
+    openGraph: {
+      title: t("metaTitle"),
+      description: t("metaDescription"),
+      type: "website",
+      url: `/${locale}/contact`,
+      locale: ogLocale(locale),
+      siteName: SITE.name,
+      images: [{ url: "/images/about-reception.jpg", width: 1200, height: 800 }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: t("metaTitle"),
+      description: t("metaDescription"),
+      images: ["/images/about-reception.jpg"],
+    },
   };
 }
 
@@ -29,15 +47,22 @@ export default async function ContactPage({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  return <ContactContent />;
+  return <ContactContent locale={locale} />;
 }
 
-function ContactContent() {
+function ContactContent({ locale }: { locale: Locale }) {
   const t = useTranslations("contactPage");
   const tHospital = useTranslations("hospital");
+  const tNav = useTranslations("nav");
 
   return (
     <>
+      <BreadcrumbJsonLd
+        items={[
+          { name: tNav("home"), path: `/${locale}` },
+          { name: tNav("contact"), path: `/${locale}/contact` },
+        ]}
+      />
       <section className="grid-noise px-6 pb-12 pt-12 md:pb-16 md:pt-16">
         <div className="mx-auto max-w-4xl text-center">
           <FadeUp>

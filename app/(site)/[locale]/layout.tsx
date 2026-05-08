@@ -12,6 +12,11 @@ import {
   ThemeProvider,
   themeBootstrapScript,
 } from "@/components/theme/ThemeProvider";
+import {
+  HospitalJsonLd,
+  WebSiteJsonLd,
+} from "@/components/seo/JsonLd";
+import { localizedAlternates, ogLocale, SITE } from "@/lib/seo";
 import { routing, type Locale } from "@/i18n/routing";
 
 const sans = Plus_Jakarta_Sans({
@@ -40,24 +45,74 @@ export async function generateMetadata({
   if (!hasLocale(routing.locales, locale)) return {};
   const t = await getTranslations({ locale, namespace: "home" });
   return {
-    metadataBase: new URL("https://uniquehospital.cm"),
+    metadataBase: new URL(SITE.url),
     title: {
       default: t("metaTitle"),
       template: "%s · Unique Hospital",
     },
     description: t("metaDescription"),
+    applicationName: SITE.name,
+    keywords:
+      locale === "fr"
+        ? [
+            "Unique Hospital",
+            "hôpital Bonaberi",
+            "hôpital Douala",
+            "gynécologie Cameroun",
+            "obstétrique Douala",
+            "chirurgie Bonaberi",
+            "soins 24h/24 Cameroun",
+            "laboratoire médical Douala",
+            "Bonasama",
+          ]
+        : [
+            "Unique Hospital",
+            "Bonaberi hospital",
+            "Douala hospital",
+            "OBGYN Cameroon",
+            "surgery Bonaberi",
+            "24/7 emergency care Cameroon",
+            "medical laboratory Douala",
+            "Bonasama Health District",
+          ],
+    authors: [{ name: SITE.name, url: SITE.url }],
+    creator: SITE.name,
+    publisher: SITE.name,
+    formatDetection: { email: false, address: false, telephone: false },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: { index: true, follow: true, "max-image-preview": "large" },
+    },
     openGraph: {
       title: t("ogTitle"),
       description: t("ogDescription"),
       type: "website",
-      locale: locale === "fr" ? "fr_FR" : "en_US",
+      url: `/${locale}`,
+      siteName: SITE.name,
+      locale: ogLocale(locale as Locale),
+      alternateLocale: routing.locales
+        .filter((l) => l !== locale)
+        .map((l) => ogLocale(l as Locale)),
+      images: [
+        {
+          url: SITE.defaultOgImage,
+          width: 1200,
+          height: 800,
+          alt: SITE.name,
+        },
+      ],
     },
-    alternates: {
-      languages: {
-        en: "/en",
-        fr: "/fr",
-      },
+    twitter: {
+      card: "summary_large_image",
+      title: t("ogTitle"),
+      description: t("ogDescription"),
+      images: [SITE.defaultOgImage],
     },
+    alternates: localizedAlternates({
+      locale: locale as Locale,
+      pathname: "",
+    }),
   };
 }
 
@@ -88,6 +143,8 @@ export default async function LocaleLayout({
         >
           {themeBootstrapScript}
         </Script>
+        <HospitalJsonLd locale={locale as Locale} />
+        <WebSiteJsonLd locale={locale as Locale} />
         <ThemeProvider>
           <NextIntlClientProvider messages={messages} locale={locale}>
             <Navbar />

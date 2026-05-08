@@ -6,6 +6,8 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { HOSPITAL } from "@/lib/hospital";
 import { BookingForm } from "@/components/booking/BookingForm";
 import { FadeUp } from "@/components/motion/Reveal";
+import { BreadcrumbJsonLd } from "@/components/seo/JsonLd";
+import { localizedAlternates, ogLocale, SITE } from "@/lib/seo";
 import type { Locale } from "@/i18n/routing";
 
 export async function generateMetadata({
@@ -18,6 +20,22 @@ export async function generateMetadata({
   return {
     title: t("metaTitle"),
     description: t("metaDescription"),
+    alternates: localizedAlternates({ locale, pathname: "/appointment" }),
+    openGraph: {
+      title: t("metaTitle"),
+      description: t("metaDescription"),
+      type: "website",
+      url: `/${locale}/appointment`,
+      locale: ogLocale(locale),
+      siteName: SITE.name,
+      images: [{ url: "/images/doctor-portrait.jpg", width: 1200, height: 800 }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: t("metaTitle"),
+      description: t("metaDescription"),
+      images: ["/images/doctor-portrait.jpg"],
+    },
   };
 }
 
@@ -28,14 +46,22 @@ export default async function AppointmentPage({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  return <AppointmentContent />;
+  return <AppointmentContent locale={locale} />;
 }
 
-function AppointmentContent() {
+function AppointmentContent({ locale }: { locale: Locale }) {
   const t = useTranslations("appointmentPage");
   const tHospital = useTranslations("hospital");
+  const tNav = useTranslations("nav");
 
   return (
+    <>
+      <BreadcrumbJsonLd
+        items={[
+          { name: tNav("home"), path: `/${locale}` },
+          { name: t("eyebrow"), path: `/${locale}/appointment` },
+        ]}
+      />
     <section className="grid-noise px-6 pb-20 pt-12 md:pt-16">
       <div className="mx-auto grid max-w-7xl gap-10 md:grid-cols-12 md:gap-12">
         <div className="md:col-span-5">
@@ -106,5 +132,6 @@ function AppointmentContent() {
         </div>
       </div>
     </section>
+    </>
   );
 }

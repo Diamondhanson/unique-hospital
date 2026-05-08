@@ -5,6 +5,8 @@ import { useTranslations } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { HOSPITAL } from "@/lib/hospital";
 import { FadeUp, Stagger, StaggerItem } from "@/components/motion/Reveal";
+import { BreadcrumbJsonLd } from "@/components/seo/JsonLd";
+import { localizedAlternates, ogLocale, SITE } from "@/lib/seo";
 import type { Locale } from "@/i18n/routing";
 
 export async function generateMetadata({
@@ -17,6 +19,24 @@ export async function generateMetadata({
   return {
     title: t("metaTitle"),
     description: t("metaDescription"),
+    alternates: localizedAlternates({ locale, pathname: "/about" }),
+    openGraph: {
+      title: t("metaTitle"),
+      description: t("metaDescription"),
+      type: "website",
+      url: `/${locale}/about`,
+      locale: ogLocale(locale),
+      siteName: SITE.name,
+      images: [
+        { url: "/images/about-staff-team.jpg", width: 1200, height: 800, alt: SITE.name },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: t("metaTitle"),
+      description: t("metaDescription"),
+      images: ["/images/about-staff-team.jpg"],
+    },
   };
 }
 
@@ -33,6 +53,7 @@ export default async function AboutPage({
 function AboutContent({ locale }: { locale: Locale }) {
   const t = useTranslations("about");
   const tHospital = useTranslations("hospital");
+  const tNav = useTranslations("nav");
 
   const founded = new Date(HOSPITAL.founded).toLocaleDateString(
     locale === "fr" ? "fr-FR" : "en-US",
@@ -41,6 +62,12 @@ function AboutContent({ locale }: { locale: Locale }) {
 
   return (
     <>
+      <BreadcrumbJsonLd
+        items={[
+          { name: tNav("home"), path: `/${locale}` },
+          { name: tNav("about"), path: `/${locale}/about` },
+        ]}
+      />
       <section className="grid-noise px-6 pb-16 pt-12 md:pb-24 md:pt-16">
         <div className="mx-auto max-w-4xl text-center">
           <FadeUp>
