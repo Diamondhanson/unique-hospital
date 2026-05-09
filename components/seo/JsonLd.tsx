@@ -2,11 +2,25 @@ import { HOSPITAL } from "@/lib/hospital";
 import { absoluteUrl, SITE } from "@/lib/seo";
 import type { Locale } from "@/i18n/routing";
 
-function Script({ data }: { data: object }) {
+/** Escape `</script>` in the JSON payload so it can't break out of the
+ *  surrounding script tag. Other characters in JSON are already safe. */
+function escapeJson(value: object): string {
+  return JSON.stringify(value).replace(/<\//g, "<\\/");
+}
+
+function Script({ id, data }: { id: string; data: object }) {
+  // We render the <script> via dangerouslySetInnerHTML on a wrapper element
+  // so React's strict-mode dev warning ("Encountered a script tag while
+  // rendering React component") doesn't fire. The script still ends up
+  // inline in the static HTML, which is what Google's crawler needs to
+  // pick up the JSON-LD. JSON-LD scripts aren't executed by the browser,
+  // so it doesn't matter that they're inserted via innerHTML.
+  const html = `<script id="${id}" type="application/ld+json">${escapeJson(data)}</script>`;
   return (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
+    <span
+      data-jsonld
+      style={{ display: "none" }}
+      dangerouslySetInnerHTML={{ __html: html }}
     />
   );
 }
@@ -80,7 +94,7 @@ export function HospitalJsonLd({ locale }: { locale: Locale }) {
     ],
     availableLanguage: ["en", "fr"],
   };
-  return <Script data={data} />;
+  return <Script id="ld-hospital" data={data} />;
 }
 
 /** WebSite schema (helps Google understand site structure). */
@@ -94,7 +108,7 @@ export function WebSiteJsonLd({ locale }: { locale: Locale }) {
     inLanguage: locale === "fr" ? "fr-FR" : "en-US",
     publisher: { "@id": `${SITE.url}/#hospital` },
   };
-  return <Script data={data} />;
+  return <Script id="ld-website" data={data} />;
 }
 
 export type Crumb = { name: string; path: string };
@@ -111,7 +125,7 @@ export function BreadcrumbJsonLd({ items }: { items: Crumb[] }) {
       item: absoluteUrl(c.path),
     })),
   };
-  return <Script data={data} />;
+  return <Script id="ld-breadcrumbs" data={data} />;
 }
 
 /** Article schema for blog posts. */
@@ -146,7 +160,7 @@ export function ArticleJsonLd({
       : { "@type": "Organization", "@id": `${SITE.url}/#hospital` },
     publisher: { "@id": `${SITE.url}/#hospital` },
   };
-  return <Script data={data} />;
+  return <Script id="ld-article" data={data} />;
 }
 
 /** MedicalProcedure / Service schema for individual service pages. */
@@ -170,5 +184,5 @@ export function MedicalServiceJsonLd({
     image: image ? absoluteUrl(image) : undefined,
     provider: { "@id": `${SITE.url}/#hospital` },
   };
-  return <Script data={data} />;
+  return <Script id="ld-medical-service" data={data} />;
 }
