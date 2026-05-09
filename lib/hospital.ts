@@ -10,6 +10,7 @@ export const HOSPITAL = {
     facebook:
       "https://www.facebook.com/profile.php?id=100087249619339",
     whatsapp: "https://wa.me/237676621850",
+    instagram: "https://www.instagram.com/unique_hospital_bonaberi_",
   },
 } as const;
 

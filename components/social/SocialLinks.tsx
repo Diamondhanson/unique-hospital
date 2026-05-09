@@ -36,6 +36,26 @@ function WhatsAppIcon({ className }: { className?: string }) {
   );
 }
 
+function InstagramIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      role="img"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      className={className}
+    >
+      <rect x="3" y="3" width="18" height="18" rx="5" />
+      <circle cx="12" cy="12" r="4" />
+      <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
+
 export function SocialLinks({
   size = "md",
   className = "",
@@ -67,6 +87,17 @@ export function SocialLinks({
           className={`${base} hover:border-brand-lime-500 hover:bg-brand-lime-500/15 hover:text-brand-lime-500`}
         >
           <WhatsAppIcon className={icon} />
+        </a>
+      </li>
+      <li>
+        <a
+          href={HOSPITAL.social.instagram}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Instagram"
+          className={`${base} hover:border-brand-blue-300 hover:bg-brand-blue-500/15 hover:text-brand-blue-200`}
+        >
+          <InstagramIcon className={icon} />
         </a>
       </li>
       <li>

@@ -73,7 +73,11 @@ export function HospitalJsonLd({ locale }: { locale: Locale }) {
         closes: "23:59",
       },
     ],
-    sameAs: [HOSPITAL.social.facebook, HOSPITAL.social.whatsapp],
+    sameAs: [
+      HOSPITAL.social.facebook,
+      HOSPITAL.social.instagram,
+      HOSPITAL.social.whatsapp,
+    ],
     availableLanguage: ["en", "fr"],
   };
   return <Script data={data} />;
